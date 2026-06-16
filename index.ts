@@ -1,5 +1,7 @@
 import * as readline from "readline";
+import { ATMEngine } from "./atm";
 
+const atm = new ATMEngine();
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -19,8 +21,33 @@ rl.on("line", (line: string) => {
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
 
-    console.log("command: ", command);
-    console.log("args: ", args);
+    console.log("");
+
+    switch (command) {
+        case "login": {
+            if (!args[0]) {
+                console.log("Usage: login [name]");
+            } else {
+                atm.login(args[0]).forEach((msg) => console.log(msg));
+            }
+            break;
+        }
+
+        case "logout": {
+            console.log(atm.logout());
+            break;
+        }
+
+        case "exit": {
+            rl.close();
+            return;
+        }
+
+        default: {
+            console.log(`Unknown command: ${command}`);
+            break;
+        }
+    }
 
     console.log("");
     rl.prompt();
