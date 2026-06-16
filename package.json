@@ -1,0 +1,12 @@
+{
+    "name": "dkatalis-atm-cli",
+    "version": "1.0.0",
+    "description": "ATM CLI Simulation",
+    "main": "index.ts",
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "ts-node": "^10.9.0",
+        "@types/node": "^20.0.0"
+    }
+}
