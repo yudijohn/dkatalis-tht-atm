@@ -38,6 +38,26 @@ rl.on("line", (line: string) => {
             break;
         }
 
+        case "deposit": {
+            const amount = parseFloat(args[0]);
+            if (isNaN(amount)) {
+                console.log("Usage: deposit [amount]");
+            } else {
+                atm.deposit(amount);
+            }
+            break;
+        }
+
+        case "withdraw": {
+            const amount = parseFloat(args[0]);
+            if (isNaN(amount)) {
+                console.log("Usage: withdraw [amount]");
+            } else {
+                atm.withdraw(amount);
+            }
+            break;
+        }
+
         case "exit": {
             console.log("Thank you for using our atm service. Have a nice day!");
             console.log("");
