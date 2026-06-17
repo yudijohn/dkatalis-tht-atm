@@ -1,20 +1,10 @@
 import { User } from "./types";
 import { AuthService } from "./services/auth.service";
+import { UserService } from "./services/user.service";
 
 export class ATMEngine {
-    public users: Map<string, User> = new Map();
+    public users: User[] = [];
     public currentUser: User | null = null;
-
-    public getOrCreateUser(name: string): User {
-        let user = this.users.get(name);
-
-        if (!user) {
-            user = { name, balance: 0, debts: new Map() };
-            this.users.set(name, user);
-        }
-
-        return user;
-    }
 
     public login(name: string): string[] {
         return AuthService.login(this, name);
@@ -22,5 +12,9 @@ export class ATMEngine {
 
     public logout(): string {
         return AuthService.logout(this);
+    }
+
+    public getOrCreateUser(name: string): User {
+        return UserService.getOrCreateUser(this, name);
     }
 }
