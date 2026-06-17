@@ -8,7 +8,7 @@ export class UserService {
         let user = engine.users.find((user) => user.user_key === userKey);
 
         if (!user) {
-            user = { user_key: userKey, name: name, balance: 0, debts: new Map() };
+            user = { user_key: userKey, name: name, balance: 0 };
             engine.users.push(user);
         }
 

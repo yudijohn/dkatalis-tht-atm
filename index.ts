@@ -28,13 +28,13 @@ rl.on("line", (line: string) => {
             if (!args[0]) {
                 console.log("Usage: login [name]");
             } else {
-                atm.login(args[0]).forEach((msg) => console.log(msg));
+                atm.login(args[0]);
             }
             break;
         }
 
         case "logout": {
-            console.log(atm.logout());
+            atm.logout();
             break;
         }
 

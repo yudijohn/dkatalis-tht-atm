@@ -7,12 +7,12 @@ export class ATMEngine {
     public users: User[] = [];
     public currentUser: User | null = null;
 
-    public login(name: string): string[] {
-        return AuthService.login(this, name);
+    public login(name: string): void {
+        AuthService.login(this, name);
     }
 
-    public logout(): string {
-        return AuthService.logout(this);
+    public logout(): void {
+        AuthService.logout(this);
     }
 
     public deposit(amount: number): void {
