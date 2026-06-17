@@ -55,26 +55,26 @@ rl.on("line", (line: string) => {
         }
 
         case "deposit": {
-            const amount = parseFloat(args[0]);
-            if (isNaN(amount)) {
-                console.log("Usage: deposit [amount]");
-            } else {
-                requireAuth((user) => {
+            requireAuth((user) => {
+                const amount = parseFloat(args[0]);
+                if (isNaN(amount)) {
+                    console.log("Usage: deposit [amount]");
+                } else {
                     atm.deposit(user, amount);
-                });
-            }
+                }
+            });
             break;
         }
 
         case "withdraw": {
-            const amount = parseFloat(args[0]);
-            if (isNaN(amount)) {
-                console.log("Usage: withdraw [amount]");
-            } else {
-                requireAuth((user) => {
+            requireAuth((user) => {
+                const amount = parseFloat(args[0]);
+                if (isNaN(amount)) {
+                    console.log("Usage: withdraw [amount]");
+                } else {
                     atm.withdraw(user, amount);
-                });
-            }
+                }
+            });
             break;
         }
 
