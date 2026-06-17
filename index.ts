@@ -1,5 +1,6 @@
 import * as readline from "readline";
 import { ATMEngine } from "./atm";
+import { User } from "./types";
 
 const atm = new ATMEngine();
 const rl = readline.createInterface({
@@ -7,6 +8,21 @@ const rl = readline.createInterface({
     output: process.stdout,
     prompt: "$ ",
 });
+
+/**
+ * Middleware Guard
+ * Ensures a user is logged in before executing an action
+ * 
+ * @param action The action to execute if the user is authenticated
+ */
+function requireAuth<T>(action: (user: User) => T): T | void {
+    if (!atm.currentUser) {
+        console.error("You need to login first.");
+        return;
+    }
+
+    return action(atm.currentUser);
+}
 
 rl.prompt();
 
@@ -43,7 +59,9 @@ rl.on("line", (line: string) => {
             if (isNaN(amount)) {
                 console.log("Usage: deposit [amount]");
             } else {
-                atm.deposit(amount);
+                requireAuth((user) => {
+                    atm.deposit(user, amount);
+                });
             }
             break;
         }
@@ -53,7 +71,9 @@ rl.on("line", (line: string) => {
             if (isNaN(amount)) {
                 console.log("Usage: withdraw [amount]");
             } else {
-                atm.withdraw(amount);
+                requireAuth((user) => {
+                    atm.withdraw(user, amount);
+                });
             }
             break;
         }

@@ -1,40 +1,30 @@
-import { ATMEngine } from "../atm";
+import { User } from "../types";
 
 export class TransactionService {
-    public static deposit(engine: ATMEngine, amount: number): void {
-        if (!engine.currentUser) {
-            console.error("You need to login first.");
-            return;
-        }
-
+    public static deposit(user: User, amount: number): void {
         if (amount <= 0) {
             console.error("Amount must be greater than 0.");
             return;
         }
 
-        engine.currentUser.balance += amount;
+        user.balance += amount;
 
-        console.log(`Your balance is $${engine.currentUser.balance}`);
+        console.log(`Your balance is $${user.balance}`);
     }
 
-    public static withdraw(engine: ATMEngine, amount: number): void {
-        if (!engine.currentUser) {
-            console.error("You need to login first.");
-            return;
-        }
-
+    public static withdraw(user: User, amount: number): void {
         if (amount <= 0) {
             console.error("Amount must be greater than 0.");
             return;
         }
 
-        if (engine.currentUser.balance < amount) {
+        if (user.balance < amount) {
             console.error("Insufficient funds.");
             return;
         }
 
-        engine.currentUser.balance -= amount;
+        user.balance -= amount;
 
-        console.log(`Your balance is $${engine.currentUser.balance}`);
+        console.log(`Your balance is $${user.balance}`);
     }
 }

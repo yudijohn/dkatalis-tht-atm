@@ -15,12 +15,12 @@ export class ATMEngine {
         AuthService.logout(this);
     }
 
-    public deposit(amount: number): void {
-        TransactionService.deposit(this, amount);
+    public deposit(user: User, amount: number): void {
+        TransactionService.deposit(user, amount);
     }
 
-    public withdraw(amount: number): void {
-        TransactionService.withdraw(this, amount);
+    public withdraw(user: User, amount: number): void {
+        TransactionService.withdraw(user, amount);
     }
 
     public getOrCreateUser(name: string): User {
