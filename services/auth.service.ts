@@ -1,27 +1,32 @@
-import { ATMEngine } from "../atm";
+import { atmStore } from "../store";
 import { UserService } from "./user.service";
 
 export class AuthService {
-    public static login(engine: ATMEngine, name: string): void {
-        if (engine.currentUser) {
-            console.warn(`You are already logged in as ${engine.currentUser.name}.`);
+    public static login(name: string): void {
+        let user = atmStore.currentUser;
+
+        if (user) {
+            console.warn(`You are already logged in as ${user.name}.`);
             return;
         }
 
-        engine.currentUser = UserService.getOrCreateUser(engine, name);
+        user = UserService.getOrCreateUser(name);
+        atmStore.setCurrentUser(user);
 
-        console.log(`Hello, ${engine.currentUser.name}!\n`);
-        UserService.printBalance(engine.currentUser);
+        console.log(`Hello, ${user.name}!\n`);
+        UserService.printBalance(user);
     }
 
-    public static logout(engine: ATMEngine): void {
-        if (!engine.currentUser) {
+    public static logout(): void {
+        const user = atmStore.currentUser;
+
+        if (!user) {
             console.error("No user logged in.");
             return;
         }
 
-        const name = engine.currentUser.name;
-        engine.currentUser = null;
+        const name = user.name;
+        atmStore.setCurrentUser(null);
 
         console.log(`Goodbye, ${name}!`);
     }

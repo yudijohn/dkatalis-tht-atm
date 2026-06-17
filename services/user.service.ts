@@ -1,15 +1,14 @@
-import { ATMEngine } from "../atm";
+import { atmStore } from "../store";
 import { User } from "../types";
 
 export class UserService {
-    public static getOrCreateUser(engine: ATMEngine, name: string): User {
+    public static getOrCreateUser(name: string): User {
         const userKey = name.toLowerCase();
 
-        let user = engine.users.find((user) => user.user_key === userKey);
+        let user = atmStore.getUser(userKey);
 
         if (!user) {
-            user = { user_key: userKey, name: name, balance: 0 };
-            engine.users.push(user);
+            user = atmStore.createUser({ user_key: userKey, name: name, balance: 0 });
         }
 
         return user;

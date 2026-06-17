@@ -28,4 +28,8 @@ export class TransactionService {
 
         UserService.printBalance(user);
     }
+
+    public transfer(targetName: string, amount: number): void {
+        // 
+    }
 }

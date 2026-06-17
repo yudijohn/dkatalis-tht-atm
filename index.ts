@@ -1,5 +1,6 @@
 import * as readline from "readline";
 import { ATMEngine } from "./atm";
+import { atmStore } from "./store";
 import { User } from "./types";
 
 const atm = new ATMEngine();
@@ -16,12 +17,14 @@ const rl = readline.createInterface({
  * @param action The action to execute if the user is authenticated
  */
 function requireAuth<T>(action: (user: User) => T): T | void {
-    if (!atm.currentUser) {
+    const user = atmStore.currentUser;
+
+    if (!user) {
         console.error("You need to login first.");
         return;
     }
 
-    return action(atm.currentUser);
+    return action(user);
 }
 
 rl.prompt();
