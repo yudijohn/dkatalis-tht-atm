@@ -39,6 +39,8 @@ rl.on("line", (line: string) => {
         }
 
         case "exit": {
+            console.log("Thank you for using our atm service. Have a nice day!");
+            console.log("");
             rl.close();
             return;
         }
@@ -53,4 +55,4 @@ rl.on("line", (line: string) => {
     rl.prompt();
 }).on("close", () => {
     process.exit(0);
-});
+}); 
