@@ -18,4 +18,8 @@ export class ATMEngine {
     public withdraw(user: User, amount: number): void {
         TransactionService.withdraw(user, amount);
     }
+
+    public transfer(user: User, targetName: string, amount: number): void {
+        TransactionService.transfer(user, targetName, amount);
+    }
 }

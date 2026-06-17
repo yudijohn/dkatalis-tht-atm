@@ -81,6 +81,19 @@ rl.on("line", (line: string) => {
             break;
         }
 
+        case "transfer": {
+            requireAuth((user) => {
+                const targetName = args[0];
+                const amount = parseFloat(args[1]);
+                if (!targetName || isNaN(amount)) {
+                    console.log("Usage: transfer [target] [amount]");
+                } else {
+                    atm.transfer(user, targetName, amount);
+                }
+            });
+            break;
+        }
+
         case "exit": {
             console.log("Thank you for using our atm service. Have a nice day!\n");
             rl.close();

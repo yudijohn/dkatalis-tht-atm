@@ -29,7 +29,23 @@ export class TransactionService {
         UserService.printBalance(user);
     }
 
-    public transfer(targetName: string, amount: number): void {
-        // 
+    public static transfer(user: User, targetName: string, amount: number): void {
+        if (amount <= 0) {
+            console.error("Amount must be greater than 0.");
+            return;
+        }
+
+        if (targetName === user.name) {
+            console.error("Cannot transfer to yourself.");
+            return;
+        }
+
+        const targetUser: User = UserService.getOrCreateUser(targetName);
+
+        user.balance -= amount;
+        targetUser.balance += amount;
+
+        console.log(`Transferred $${amount} to ${targetUser.name}\n`);
+        UserService.printBalance(user);
     }
 }
