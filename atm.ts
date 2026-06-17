@@ -1,6 +1,5 @@
 import { User } from "./types";
 import { AuthService } from "./services/auth.service";
-import { UserService } from "./services/user.service";
 import { TransactionService } from "./services/transaction.service";
 
 export class ATMEngine {
@@ -21,9 +20,5 @@ export class ATMEngine {
 
     public withdraw(user: User, amount: number): void {
         TransactionService.withdraw(user, amount);
-    }
-
-    public getOrCreateUser(name: string): User {
-        return UserService.getOrCreateUser(this, name);
     }
 }

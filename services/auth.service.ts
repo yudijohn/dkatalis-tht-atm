@@ -8,7 +8,7 @@ export class AuthService {
             return;
         }
 
-        engine.currentUser = engine.getOrCreateUser(name);
+        engine.currentUser = UserService.getOrCreateUser(engine, name);
 
         console.log(`Hello, ${engine.currentUser.name}!\n`);
         UserService.printBalance(engine.currentUser);
