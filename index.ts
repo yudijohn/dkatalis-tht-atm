@@ -79,8 +79,7 @@ rl.on("line", (line: string) => {
         }
 
         case "exit": {
-            console.log("Thank you for using our atm service. Have a nice day!");
-            console.log("");
+            console.log("Thank you for using our atm service. Have a nice day!\n");
             rl.close();
             return;
         }

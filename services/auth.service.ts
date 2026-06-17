@@ -1,4 +1,5 @@
 import { ATMEngine } from "../atm";
+import { UserService } from "./user.service";
 
 export class AuthService {
     public static login(engine: ATMEngine, name: string): void {
@@ -9,8 +10,8 @@ export class AuthService {
 
         engine.currentUser = engine.getOrCreateUser(name);
 
-        console.log(`Hello, ${engine.currentUser.name}!`);
-        console.log(`Your balance is $${engine.currentUser.balance}`);
+        console.log(`Hello, ${engine.currentUser.name}!\n`);
+        UserService.printBalance(engine.currentUser);
     }
 
     public static logout(engine: ATMEngine): void {

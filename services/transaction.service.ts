@@ -1,4 +1,5 @@
 import { User } from "../types";
+import { UserService } from "./user.service";
 
 export class TransactionService {
     public static deposit(user: User, amount: number): void {
@@ -9,7 +10,7 @@ export class TransactionService {
 
         user.balance += amount;
 
-        console.log(`Your balance is $${user.balance}`);
+        UserService.printBalance(user);
     }
 
     public static withdraw(user: User, amount: number): void {
@@ -25,6 +26,6 @@ export class TransactionService {
 
         user.balance -= amount;
 
-        console.log(`Your balance is $${user.balance}`);
+        UserService.printBalance(user);
     }
 }

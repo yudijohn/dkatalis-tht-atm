@@ -14,4 +14,8 @@ export class UserService {
 
         return user;
     }
+
+    public static printBalance(user: User): void {
+        console.log(`Your balance is $${user.balance}`);
+    }
 }
