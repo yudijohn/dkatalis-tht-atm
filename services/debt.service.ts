@@ -1,5 +1,6 @@
 import { atmStore } from "../store";
 import { Debt, User } from "../types";
+import { UserService } from "./user.service";
 
 export class DebtService {
     public static addDebt(user: User, targetUser: User, amount: number): void {
@@ -9,6 +10,7 @@ export class DebtService {
             const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
             debt.amount = debt.amount + amount;
             debt.updated_at = new Date();
+            UserService.updateBalance(targetUser, 'add', amount);
         } else {
             atmStore.createDebt({
                 user_key: user.user_key,
@@ -33,6 +35,8 @@ export class DebtService {
                 debt.amount = newDebt;
                 debt.updated_at = new Date();
             }
+
+            UserService.updateBalance(targetUser, 'add', debtSettle);
         }
 
         return debtSettle;

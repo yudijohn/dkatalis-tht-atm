@@ -14,6 +14,11 @@ export class UserService {
         return user;
     }
 
+    public static updateBalance(user: User, type: 'add' | 'reduce', amount: number): void {
+        if (type === 'add') user.balance += amount;
+        else user.balance -= amount;
+    }
+
     public static printBalance(user: User): void {
         console.log(`Your balance is $${user.balance}`);
     }
