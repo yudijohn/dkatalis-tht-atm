@@ -57,6 +57,10 @@ class ATMStore {
             updated_at: new Date()
         });
     }
+
+    public deleteDebt(user_key: string, target_user_key: string): void {
+        this._debts = this._debts.filter((debt) => debt.user_key !== user_key || debt.target_user_key !== target_user_key);
+    }
 }
 
 export const atmStore = new ATMStore();

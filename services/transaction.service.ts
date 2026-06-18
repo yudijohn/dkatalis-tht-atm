@@ -21,7 +21,8 @@ export class TransactionService {
         let remainingToTransfer = amount;
 
         // 1. Reduce debt to target User if exists
-        // 
+        const debtSettled = DebtService.reduceDebt(targetUser, user, amount);
+        remainingToTransfer -= debtSettled;
 
         // 2. Transfer from actual cash balance
         if (remainingToTransfer > 0 && user.balance > 0) {
@@ -29,6 +30,8 @@ export class TransactionService {
             user.balance -= cashTransfer;
             targetUser.balance += cashTransfer;
             remainingToTransfer -= cashTransfer;
+
+            console.log(`Transferred $${cashTransfer} to ${targetUser.name}\n`);
         }
 
         // 3. Remaining amount will counted as debt
@@ -36,7 +39,6 @@ export class TransactionService {
             DebtService.addDebt(user, targetUser, remainingToTransfer);
         }
 
-        console.log(`Transferred $${amount} to ${targetUser.name}\n`);
         UserService.printBalance(user);
         UserService.printDebt(user, targetUser);
     }

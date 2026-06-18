@@ -17,4 +17,24 @@ export class DebtService {
             });
         }
     }
+
+    public static reduceDebt(user: User, targetUser: User, amount: number): number {
+        const hasDebt: boolean = atmStore.hasDebt(user.user_key, targetUser.user_key);
+        let debtSettle = 0;
+
+        if (hasDebt) {
+            const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
+            debtSettle = Math.min(amount, debt.amount);
+            const newDebt = debt.amount - debtSettle;
+
+            if (newDebt === 0) {
+                atmStore.deleteDebt(user.user_key, targetUser.user_key);
+            } else {
+                debt.amount = newDebt;
+                debt.updated_at = new Date();
+            }
+        }
+
+        return debtSettle;
+    }
 }
