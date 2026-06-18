@@ -19,14 +19,14 @@ export class UserService {
     }
 
     public static printDebt(user: User, targetUser?: User): void {
-        const hasDebt: boolean = atmStore.hasDebt(user.user_key, targetUser ? targetUser.user_key : undefined);
+        const hasDebt: boolean = atmStore.hasDebt(user.user_key, targetUser ? targetUser.user_key : undefined, true);
 
         if (hasDebt) {
             if (targetUser) {
                 const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
                 console.log(`\nOwed $${debt.amount} to ${targetUser.name}`);
             } else {
-                const debts: Debt[] = atmStore.getDebt(user.user_key) as Debt[];
+                const debts: Debt[] = atmStore.getDebt(user.user_key, undefined, true) as Debt[];
 
                 console.log("");
                 debts.forEach((debt) => {
