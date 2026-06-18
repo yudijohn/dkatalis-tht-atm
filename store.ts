@@ -1,11 +1,16 @@
-import { User } from "./types";
+import { Debt, User } from "./types";
 
 class ATMStore {
     private _users: Map<string, User> = new Map();
     private _currentUser: User | null = null;
+    private _debts: Debt[] = [];
 
     public get currentUser(): User | null {
         return this._currentUser;
+    }
+
+    public get debts(): Debt[] {
+        return this._debts;
     }
 
     public setCurrentUser(user: User | null): void {
@@ -20,6 +25,25 @@ class ATMStore {
         this._users.set(userData.user_key, userData);
 
         return userData;
+    }
+
+    public hasDebt(user_key: string, target_user_key?: string): boolean {
+        if (target_user_key) {
+            return !!this._debts.find((debt) => debt.user_key === user_key && debt.target_user_key === target_user_key);
+        }
+
+        return !!this._debts.find((debt) => debt.user_key === user_key);
+    }
+
+    public getDebt(user_key: string, target_user_key: string): Debt | undefined {
+        return this._debts.find((debt) => debt.user_key === user_key && debt.target_user_key === target_user_key);
+    }
+
+    public createDebt(debtData: { user_key: string, target_user_key: string, amount: number }): void {
+        this._debts.push({
+            ...debtData,
+            updated_at: new Date()
+        });
     }
 }
 
