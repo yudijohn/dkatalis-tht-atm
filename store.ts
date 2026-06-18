@@ -32,11 +32,15 @@ class ATMStore {
             return !!this._debts.find((debt) => debt.user_key === user_key && debt.target_user_key === target_user_key);
         }
 
-        return !!this._debts.find((debt) => debt.user_key === user_key);
+        return !!this._debts.find((debt) => (debt.user_key === user_key || debt.target_user_key === user_key));
     }
 
-    public getDebt(user_key: string, target_user_key: string): Debt | undefined {
-        return this._debts.find((debt) => debt.user_key === user_key && debt.target_user_key === target_user_key);
+    public getDebt(user_key: string, target_user_key?: string): Debt | Debt[] | undefined {
+        if (target_user_key) {
+            return this._debts.find((debt) => debt.user_key === user_key && debt.target_user_key === target_user_key);
+        }
+
+        return this._debts.filter((debt) => (debt.user_key === user_key || debt.target_user_key === user_key));
     }
 
     public createDebt(debtData: { user_key: string, target_user_key: string, amount: number }): void {

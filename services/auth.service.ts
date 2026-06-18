@@ -15,6 +15,7 @@ export class AuthService {
 
         console.log(`Hello, ${user.name}!\n`);
         UserService.printBalance(user);
+        UserService.printDebt(user);
     }
 
     public static logout(): void {

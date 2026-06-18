@@ -26,7 +26,15 @@ export class UserService {
                 const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
                 console.log(`\nOwed $${debt.amount} to ${targetUser.name}`);
             } else {
-                console.log(`\nUnder construction`);
+                const debts: Debt[] = atmStore.getDebt(user.user_key) as Debt[];
+
+                console.log("");
+                debts.forEach((debt) => {
+                    const owedTo: string = debt.user_key === user.user_key ? "to" : "from";
+                    const owedUser: User = UserService.getOrCreateUser(debt.user_key === user.user_key ? debt.target_user_key : debt.user_key);
+
+                    console.log(`Owed $${debt.amount} ${owedTo} ${owedUser.name}`);
+                });
             }
         }
     }
