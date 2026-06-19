@@ -3,10 +3,15 @@
     "version": "1.0.0",
     "description": "ATM CLI Simulation",
     "main": "index.ts",
+    "scripts": {
+        "start": "npx ts-node index.ts",
+        "test": "vitest run"
+    },
     "dependencies": {},
     "devDependencies": {
         "typescript": "^5.0.0",
         "ts-node": "^10.9.0",
-        "@types/node": "^20.0.0"
+        "@types/node": "^20.0.0",
+        "vitest": "^4.0.0"
     }
 }
