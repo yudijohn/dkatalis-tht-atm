@@ -1,12 +1,35 @@
-import { User } from "../types";
+import { atmStore } from "../store";
+import { Debt, User } from "../types";
 import { DebtService } from "./debt.service";
 import { UserService } from "./user.service";
 
 export class TransactionService {
     public static deposit(user: User, amount: number): void {
-        UserService.updateBalance(user, 'add', amount);
+        let remainingAmount = amount;
+        const debts: Debt[] = atmStore.getDebt(user.user_key) as Debt[];
+
+        for (const debt of debts) {
+            if (remainingAmount === 0) {
+                break;
+            }
+
+            const targetUser: User = atmStore.getUser(debt.target_user_key)!;
+            const debtSettled = DebtService.reduceDebt(user, targetUser, remainingAmount);
+
+            if (debtSettled > 0) {
+                UserService.updateBalance(targetUser, 'add', debtSettled);
+                remainingAmount -= debtSettled;
+
+                console.log(`Transferred $${debtSettled} to ${targetUser.name}\n`);
+            }
+        }
+
+        if (remainingAmount > 0) {
+            UserService.updateBalance(user, 'add', remainingAmount);
+        }
 
         UserService.printBalance(user);
+        UserService.printDebt(user);
     }
 
     public static withdraw(user: User, amount: number): void {
@@ -41,5 +64,6 @@ export class TransactionService {
 
         UserService.printBalance(user);
         UserService.printDebt(user, targetUser);
+        UserService.printDebt(targetUser, user);
     }
 }
