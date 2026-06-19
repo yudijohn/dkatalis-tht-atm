@@ -1,8 +1,26 @@
 import { User } from "./types";
 import { AuthService } from "./services/auth.service";
 import { TransactionService } from "./services/transaction.service";
+import { atmStore } from "./store";
 
 export class ATMEngine {
+    /**
+     * Middleware Guard
+     * Ensures a user is logged in before executing an action
+     * 
+     * @param action The action to execute if the user is authenticated
+     */
+    public requireAuth<T>(action: (user: User) => T): T | void {
+        const user = atmStore.currentUser;
+
+        if (!user) {
+            console.error("You need to login first.");
+            return;
+        }
+
+        return action(user);
+    }
+
     public login(name: string): void {
         AuthService.login(name);
     }

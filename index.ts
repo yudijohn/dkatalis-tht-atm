@@ -10,23 +10,6 @@ const rl = readline.createInterface({
     prompt: "$ ",
 });
 
-/**
- * Middleware Guard
- * Ensures a user is logged in before executing an action
- * 
- * @param action The action to execute if the user is authenticated
- */
-function requireAuth<T>(action: (user: User) => T): T | void {
-    const user = atmStore.currentUser;
-
-    if (!user) {
-        console.error("You need to login first.");
-        return;
-    }
-
-    return action(user);
-}
-
 rl.prompt();
 
 rl.on("line", (line: string) => {
@@ -58,7 +41,7 @@ rl.on("line", (line: string) => {
         }
 
         case "deposit": {
-            requireAuth((user) => {
+            atm.requireAuth((user) => {
                 const amount = parseFloat(args[0]);
                 if (isNaN(amount)) {
                     console.log("Usage: deposit [amount]");
@@ -70,7 +53,7 @@ rl.on("line", (line: string) => {
         }
 
         case "withdraw": {
-            requireAuth((user) => {
+            atm.requireAuth((user) => {
                 const amount = parseFloat(args[0]);
                 if (isNaN(amount)) {
                     console.log("Usage: withdraw [amount]");
@@ -82,7 +65,7 @@ rl.on("line", (line: string) => {
         }
 
         case "transfer": {
-            requireAuth((user) => {
+            atm.requireAuth((user) => {
                 const targetName = args[0];
                 const amount = parseFloat(args[1]);
                 if (!targetName || isNaN(amount)) {
