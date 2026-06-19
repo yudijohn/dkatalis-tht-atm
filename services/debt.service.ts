@@ -25,18 +25,15 @@ export class DebtService {
         let debtSettle = 0;
 
         if (hasDebt) {
-            const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
+            let debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
             debtSettle = Math.min(amount, debt.amount);
             const newDebt = debt.amount - debtSettle;
 
             if (newDebt === 0) {
                 atmStore.deleteDebt(user.user_key, targetUser.user_key);
             } else {
-                debt.amount = newDebt;
-                debt.updated_at = new Date();
+                atmStore.updateDebt(user.user_key, targetUser.user_key, newDebt);
             }
-
-            UserService.updateBalance(targetUser, 'add', debtSettle);
         }
 
         return debtSettle;
