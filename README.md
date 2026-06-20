@@ -89,6 +89,12 @@ npx vitest run
 npx vitest
 ```
 
+### Run example session:
+```bash
+chmod +x example.sh
+./example.sh
+```
+
 ---
 
 ## 📁 Repository Structure

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Ensure we are in the script's directory
+cd "$(dirname "$0")"
+
+# Run the ATM CLI simulation with the example session commands from docs/PROBLEM_ATM.md
+./start.sh <<EOF
+login Alice
+deposit 100
+logout
+login Bob
+deposit 80
+transfer Alice 50
+transfer Alice 100
+deposit 30
+logout
+login Alice
+transfer Bob 30
+logout
+login Bob
+deposit 100
+logout
+EOF
