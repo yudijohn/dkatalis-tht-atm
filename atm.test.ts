@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { ATMEngine } from "./atm";
 import { atmStore } from "./store";
 import { UserService } from "./services/user.service";

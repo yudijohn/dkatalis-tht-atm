@@ -69,9 +69,9 @@ class ATMStore {
     }
 
     public reset(): void {
-        this._users.clear();
+        this._users = new Map;
         this._currentUser = null;
-        this._debts.length = 0;
+        this._debts = [];
     }
 }
 
