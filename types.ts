@@ -4,9 +4,10 @@ export interface User {
     balance: number;
 }
 
-export interface Transfer {
+export interface Transaction {
     user_key: string;
-    target_user_key: string;
+    target_user_key: string | null;
+    type: 'deposit' | 'withdraw' | 'transfer';
     amount: number;
     created_at: Date;
 }

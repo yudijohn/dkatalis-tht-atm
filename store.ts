@@ -1,8 +1,9 @@
-import { Debt, User } from "./types";
+import { Debt, Transaction, User } from "./types";
 
 class ATMStore {
     private _users: Map<string, User> = new Map();
     private _currentUser: User | null = null;
+    private _transactions: Transaction[] = [];
     private _debts: Debt[] = [];
 
     public get currentUser(): User | null {
@@ -25,6 +26,15 @@ class ATMStore {
         this._users.set(userData.user_key, userData);
 
         return userData;
+    }
+
+    public createTransaction(transactionData: { user_key: string, target_user_key: string | null, type: 'deposit' | 'withdraw' | 'transfer', amount: number }): Transaction {
+        this._transactions.push({
+            ...transactionData,
+            created_at: new Date()
+        });
+
+        return this._transactions[this._transactions.length - 1];
     }
 
     public hasDebt(user_key: string, target_user_key?: string, all: boolean = false): boolean {

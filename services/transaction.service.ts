@@ -9,6 +9,13 @@ export class TransactionService {
         const debts: Debt[] = atmStore.getDebt(user.user_key) as Debt[];
         const output: string[] = [];
 
+        atmStore.createTransaction({
+            user_key: user.user_key,
+            target_user_key: null,
+            type: 'deposit',
+            amount: amount
+        });
+
         for (const debt of debts) {
             if (remainingAmount === 0) {
                 break;
@@ -42,6 +49,13 @@ export class TransactionService {
 
         const output: string[] = [];
 
+        atmStore.createTransaction({
+            user_key: user.user_key,
+            target_user_key: null,
+            type: 'withdraw',
+            amount: amount
+        });
+
         UserService.updateBalance(user, 'reduce', amount);
 
         output.push(...UserService.printBalance(user));
@@ -54,6 +68,13 @@ export class TransactionService {
         const output: string[] = [];
 
         let remainingToTransfer = amount;
+
+        atmStore.createTransaction({
+            user_key: user.user_key,
+            target_user_key: targetUser.user_key,
+            type: 'transfer',
+            amount: amount
+        });
 
         // 1. Reduce debt to target User if exists
         const debtSettled = DebtService.reduceDebt(targetUser, user, amount);

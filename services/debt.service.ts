@@ -8,8 +8,7 @@ export class DebtService {
 
         if (hasDebt) {
             const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
-            debt.amount = debt.amount + amount;
-            debt.updated_at = new Date();
+            atmStore.updateDebt(user.user_key, targetUser.user_key, debt.amount + amount);
             UserService.updateBalance(targetUser, 'add', amount);
         } else {
             atmStore.createDebt({
