@@ -114,5 +114,6 @@ chmod +x example.sh
 ├── types.ts               # TypeScript interface definitions
 ├── package.json           # Scripts and dependencies configuration
 ├── tsconfig.json          # TypeScript compilation settings
-└── start.sh               # Startup shell script
+├── start.sh               # Startup shell script
+└── example.sh             # Example session runner script
 ```
