@@ -41,7 +41,7 @@ rl.on("line", (line: string) => {
 
     switch (command) {
         case "login": {
-            if (!args[0]) {
+            if (!args[0] || args.length > 1) {
                 messages.push("Usage: login [name]");
             } else {
                 messages.push(...atm.login(args[0]));
@@ -50,14 +50,18 @@ rl.on("line", (line: string) => {
         }
 
         case "logout": {
-            messages.push(...atm.logout());
+            if (args.length > 0) {
+                messages.push("Usage: logout");
+            } else {
+                messages.push(...atm.logout());
+            }
             break;
         }
 
         case "deposit": {
             atm.requireAuth((user) => {
                 const amount = parseAmount(args[0]);
-                if (amount === null) {
+                if (amount === null || args.length > 1) {
                     messages.push("Usage: deposit [amount]");
                 } else {
                     messages.push(...atm.deposit(user, amount));
@@ -69,7 +73,7 @@ rl.on("line", (line: string) => {
         case "withdraw": {
             atm.requireAuth((user) => {
                 const amount = parseAmount(args[0]);
-                if (amount === null) {
+                if (amount === null || args.length > 1) {
                     console.log("Usage: withdraw [amount]");
                 } else {
                     atm.withdraw(user, amount);
@@ -82,7 +86,7 @@ rl.on("line", (line: string) => {
             atm.requireAuth((user) => {
                 const targetName = args[0];
                 const amount = parseAmount(args[1]);
-                if (!targetName || amount === null) {
+                if (!targetName || amount === null || args.length > 2) {
                     messages.push("Usage: transfer [target] [amount]");
                 } else {
                     messages.push(...atm.transfer(user, targetName, amount));
@@ -92,7 +96,11 @@ rl.on("line", (line: string) => {
         }
 
         case "exit": {
-            messages.push("Thank you for using our atm service. Have a nice day!\n");
+            if (args.length > 0) {
+                messages.push("Usage: exit");
+            } else {
+                messages.push("Thank you for using our atm service. Have a nice day!\n");
+            }
             console.log(messages.join("\n"));
             rl.close();
             return;
