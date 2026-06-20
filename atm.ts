@@ -14,55 +14,45 @@ export class ATMEngine {
         const user = atmStore.currentUser;
 
         if (!user) {
-            console.error("You need to login first.");
-            return;
+            throw new Error("You need to login first.");
         }
 
         return action(user);
     }
 
-    public login(name: string): void {
-        AuthService.login(name);
+    public login(name: string): string[] {
+        return AuthService.login(name);
     }
 
-    public logout(): void {
-        AuthService.logout();
+    public logout(): string[] {
+        return AuthService.logout();
     }
 
-    public deposit(user: User, amount: number): void {
+    public deposit(user: User, amount: number): string[] {
         if (amount <= 0) {
-            console.error("Amount must be greater than 0.");
-            return;
+            return ["Amount must be greater than 0."];
         }
 
-        TransactionService.deposit(user, amount);
+        return TransactionService.deposit(user, amount);
     }
 
-    public withdraw(user: User, amount: number): void {
+    public withdraw(user: User, amount: number): string[] {
         if (amount <= 0) {
-            console.error("Amount must be greater than 0.");
-            return;
+            return ["Amount must be greater than 0."];
         }
 
-        if (user.balance < amount) {
-            console.error("Insufficient funds.");
-            return;
-        }
-
-        TransactionService.withdraw(user, amount);
+        return TransactionService.withdraw(user, amount);
     }
 
-    public transfer(user: User, targetName: string, amount: number): void {
+    public transfer(user: User, targetName: string, amount: number): string[] {
         if (amount <= 0) {
-            console.error("Amount must be greater than 0.");
-            return;
+            return ["Amount must be greater than 0."];
         }
 
         if (targetName === user.name) {
-            console.error("Cannot transfer to yourself.");
-            return;
+            return ["Cannot transfer to yourself."];
         }
 
-        TransactionService.transfer(user, targetName, amount);
+        return TransactionService.transfer(user, targetName, amount);
     }
 }

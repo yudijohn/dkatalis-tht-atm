@@ -19,28 +19,31 @@ export class UserService {
         else user.balance -= amount;
     }
 
-    public static printBalance(user: User): void {
-        console.log(`Your balance is $${user.balance}`);
+    public static printBalance(user: User): string[] {
+        return [`Your balance is $${user.balance}`];
     }
 
-    public static printDebt(user: User, targetUser?: User): void {
+    public static printDebt(user: User, targetUser?: User): string[] {
+        const output: string[] = [];
         const hasDebt: boolean = atmStore.hasDebt(user.user_key, targetUser ? targetUser.user_key : undefined, true);
 
         if (hasDebt) {
             if (targetUser) {
                 const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
-                console.log(`\nOwed $${debt.amount} to ${targetUser.name}`);
+                output.push(`\nOwed $${debt.amount} to ${targetUser.name}`);
             } else {
                 const debts: Debt[] = atmStore.getDebt(user.user_key, undefined, true) as Debt[];
 
-                console.log("");
+                output.push("");
                 debts.forEach((debt) => {
                     const owedTo: string = debt.user_key === user.user_key ? "to" : "from";
                     const owedUser: User = UserService.getOrCreateUser(debt.user_key === user.user_key ? debt.target_user_key : debt.user_key);
 
-                    console.log(`Owed $${debt.amount} ${owedTo} ${owedUser.name}`);
+                    output.push(`Owed $${debt.amount} ${owedTo} ${owedUser.name}`);
                 });
             }
         }
+
+        return output;
     }
 }

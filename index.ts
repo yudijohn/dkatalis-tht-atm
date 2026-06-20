@@ -1,7 +1,5 @@
 import * as readline from "readline";
 import { ATMEngine } from "./atm";
-import { atmStore } from "./store";
-import { User } from "./types";
 
 const atm = new ATMEngine();
 const rl = readline.createInterface({
@@ -23,20 +21,20 @@ rl.on("line", (line: string) => {
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
 
-    console.log("");
+    const messages: string[] = [""];
 
     switch (command) {
         case "login": {
             if (!args[0]) {
-                console.log("Usage: login [name]");
+                messages.push("Usage: login [name]");
             } else {
-                atm.login(args[0]);
+                messages.push(...atm.login(args[0]));
             }
             break;
         }
 
         case "logout": {
-            atm.logout();
+            messages.push(...atm.logout());
             break;
         }
 
@@ -44,9 +42,9 @@ rl.on("line", (line: string) => {
             atm.requireAuth((user) => {
                 const amount = parseFloat(args[0]);
                 if (isNaN(amount)) {
-                    console.log("Usage: deposit [amount]");
+                    messages.push("Usage: deposit [amount]");
                 } else {
-                    atm.deposit(user, amount);
+                    messages.push(...atm.deposit(user, amount));
                 }
             });
             break;
@@ -69,27 +67,30 @@ rl.on("line", (line: string) => {
                 const targetName = args[0];
                 const amount = parseFloat(args[1]);
                 if (!targetName || isNaN(amount)) {
-                    console.log("Usage: transfer [target] [amount]");
+                    messages.push("Usage: transfer [target] [amount]");
                 } else {
-                    atm.transfer(user, targetName, amount);
+                    messages.push(...atm.transfer(user, targetName, amount));
                 }
             });
             break;
         }
 
         case "exit": {
-            console.log("Thank you for using our atm service. Have a nice day!\n");
+            messages.push("Thank you for using our atm service. Have a nice day!\n");
+            console.log(messages.join("\n"));
             rl.close();
             return;
         }
 
         default: {
-            console.log(`Unknown command: ${command}`);
+            messages.push(`Unknown command: ${command}`);
             break;
         }
     }
 
-    console.log("");
+    messages.push("");
+    console.log(messages.join("\n"));
+
     rl.prompt();
 }).on("close", () => {
     process.exit(0);

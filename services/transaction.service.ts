@@ -4,9 +4,10 @@ import { DebtService } from "./debt.service";
 import { UserService } from "./user.service";
 
 export class TransactionService {
-    public static deposit(user: User, amount: number): void {
+    public static deposit(user: User, amount: number): string[] {
         let remainingAmount = amount;
         const debts: Debt[] = atmStore.getDebt(user.user_key) as Debt[];
+        const output: string[] = [];
 
         for (const debt of debts) {
             if (remainingAmount === 0) {
@@ -20,7 +21,7 @@ export class TransactionService {
                 UserService.updateBalance(targetUser, 'add', debtSettled);
                 remainingAmount -= debtSettled;
 
-                console.log(`Transferred $${debtSettled} to ${targetUser.name}\n`);
+                output.push(`Transferred $${debtSettled} to ${targetUser.name}\n`);
             }
         }
 
@@ -28,18 +29,29 @@ export class TransactionService {
             UserService.updateBalance(user, 'add', remainingAmount);
         }
 
-        UserService.printBalance(user);
-        UserService.printDebt(user);
+        output.push(...UserService.printBalance(user));
+        output.push(...UserService.printDebt(user));
+
+        return output;
     }
 
-    public static withdraw(user: User, amount: number): void {
+    public static withdraw(user: User, amount: number): string[] {
+        if (user.balance < amount) {
+            return ["Insufficient funds."];
+        }
+
+        const output: string[] = [];
+
         UserService.updateBalance(user, 'reduce', amount);
 
-        UserService.printBalance(user);
+        output.push(...UserService.printBalance(user));
+
+        return output;
     }
 
-    public static transfer(user: User, targetName: string, amount: number): void {
+    public static transfer(user: User, targetName: string, amount: number): string[] {
         const targetUser: User = UserService.getOrCreateUser(targetName);
+        const output: string[] = [];
 
         let remainingToTransfer = amount;
 
@@ -54,7 +66,7 @@ export class TransactionService {
             UserService.updateBalance(targetUser, 'add', cashTransfer);
             remainingToTransfer -= cashTransfer;
 
-            console.log(`Transferred $${cashTransfer} to ${targetUser.name}\n`);
+            output.push(`Transferred $${cashTransfer} to ${targetUser.name}\n`);
         }
 
         // 3. Remaining amount will counted as debt
@@ -62,8 +74,9 @@ export class TransactionService {
             DebtService.addDebt(user, targetUser, remainingToTransfer);
         }
 
-        UserService.printBalance(user);
-        UserService.printDebt(user, targetUser);
-        UserService.printDebt(targetUser, user);
+        output.push(...UserService.printBalance(user));
+        output.push(...UserService.printDebt(user));
+
+        return output;
     }
 }
