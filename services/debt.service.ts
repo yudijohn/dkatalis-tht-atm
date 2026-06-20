@@ -9,7 +9,6 @@ export class DebtService {
         if (hasDebt) {
             const debt: Debt = atmStore.getDebt(user.user_key, targetUser.user_key) as Debt;
             atmStore.updateDebt(user.user_key, targetUser.user_key, debt.amount + amount);
-            UserService.updateBalance(targetUser, 'add', amount);
         } else {
             atmStore.createDebt({
                 user_key: user.user_key,
