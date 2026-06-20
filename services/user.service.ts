@@ -8,7 +8,7 @@ export class UserService {
         let user = atmStore.getUser(userKey);
 
         if (!user) {
-            user = atmStore.createUser({ user_key: userKey, name: name, balance: 0 });
+            user = atmStore.createUser(name);
         }
 
         return user;

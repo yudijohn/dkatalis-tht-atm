@@ -2,6 +2,7 @@ export interface User {
     user_key: string;
     name: string;
     balance: number;
+    created_at: Date;
 }
 
 export interface Transaction {
@@ -16,5 +17,6 @@ export interface Debt {
     user_key: string;
     target_user_key: string;
     amount: number;
+    created_at: Date;
     updated_at: Date;
 }

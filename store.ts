@@ -22,10 +22,16 @@ class ATMStore {
         return this._users.get(name);
     }
 
-    public createUser(userData: User): User {
-        this._users.set(userData.user_key, userData);
+    public createUser(name: string): User {
+        const user = {
+            user_key: name.toLowerCase(),
+            name: name,
+            balance: 0,
+            created_at: new Date()
+        };
+        this._users.set(user.user_key, user);
 
-        return userData;
+        return user;
     }
 
     public createTransaction(transactionData: { user_key: string, target_user_key: string | null, type: 'deposit' | 'withdraw' | 'transfer', amount: number }): Transaction {
@@ -64,6 +70,7 @@ class ATMStore {
     public createDebt(debtData: { user_key: string, target_user_key: string, amount: number }): void {
         this._debts.push({
             ...debtData,
+            created_at: new Date(),
             updated_at: new Date()
         });
     }
