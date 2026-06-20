@@ -59,39 +59,51 @@ rl.on("line", (line: string) => {
         }
 
         case "deposit": {
-            atm.requireAuth((user) => {
-                const amount = parseAmount(args[0]);
-                if (amount === null || args.length > 1) {
-                    messages.push("Usage: deposit [amount]");
-                } else {
-                    messages.push(...atm.deposit(user, amount));
-                }
-            });
+            try {
+                atm.requireAuth((user) => {
+                    const amount = parseAmount(args[0]);
+                    if (amount === null || args.length > 1) {
+                        messages.push("Usage: deposit [amount]");
+                    } else {
+                        messages.push(...atm.deposit(user, amount));
+                    }
+                });
+            } catch (err: any) {
+                messages.push(err.message);
+            }
             break;
         }
 
         case "withdraw": {
-            atm.requireAuth((user) => {
-                const amount = parseAmount(args[0]);
-                if (amount === null || args.length > 1) {
-                    console.log("Usage: withdraw [amount]");
-                } else {
-                    atm.withdraw(user, amount);
-                }
-            });
+            try {
+                atm.requireAuth((user) => {
+                    const amount = parseAmount(args[0]);
+                    if (amount === null || args.length > 1) {
+                        messages.push("Usage: withdraw [amount]");
+                    } else {
+                        messages.push(...atm.withdraw(user, amount));
+                    }
+                });
+            } catch (err: any) {
+                messages.push(err.message);
+            }
             break;
         }
 
         case "transfer": {
-            atm.requireAuth((user) => {
-                const targetName = args[0];
-                const amount = parseAmount(args[1]);
-                if (!targetName || amount === null || args.length > 2) {
-                    messages.push("Usage: transfer [target] [amount]");
-                } else {
-                    messages.push(...atm.transfer(user, targetName, amount));
-                }
-            });
+            try {
+                atm.requireAuth((user) => {
+                    const targetName = args[0];
+                    const amount = parseAmount(args[1]);
+                    if (!targetName || amount === null || args.length > 2) {
+                        messages.push("Usage: transfer [target] [amount]");
+                    } else {
+                        messages.push(...atm.transfer(user, targetName, amount));
+                    }
+                });
+            } catch (err: any) {
+                messages.push(err.message);
+            }
             break;
         }
 
