@@ -1,6 +1,22 @@
 import * as readline from "readline";
 import { ATMEngine } from "./atm";
 
+/**
+ * Parses a string value as a float and validates it.
+ * Returns null if the value is NaN, infinite, or has more than 2 decimal places.
+ */
+function parseAmount(value: string): number | null {
+    const amount = parseFloat(value);
+    if (isNaN(amount) || !isFinite(amount)) {
+        return null;
+    }
+    // Verify that there are at most 2 decimal places
+    if (Math.abs(Math.round(amount * 100) - (amount * 100)) > 1e-9) {
+        return null;
+    }
+    return amount;
+}
+
 const atm = new ATMEngine();
 const rl = readline.createInterface({
     input: process.stdin,
@@ -40,8 +56,8 @@ rl.on("line", (line: string) => {
 
         case "deposit": {
             atm.requireAuth((user) => {
-                const amount = parseFloat(args[0]);
-                if (isNaN(amount)) {
+                const amount = parseAmount(args[0]);
+                if (amount === null) {
                     messages.push("Usage: deposit [amount]");
                 } else {
                     messages.push(...atm.deposit(user, amount));
@@ -52,8 +68,8 @@ rl.on("line", (line: string) => {
 
         case "withdraw": {
             atm.requireAuth((user) => {
-                const amount = parseFloat(args[0]);
-                if (isNaN(amount)) {
+                const amount = parseAmount(args[0]);
+                if (amount === null) {
                     console.log("Usage: withdraw [amount]");
                 } else {
                     atm.withdraw(user, amount);
@@ -65,8 +81,8 @@ rl.on("line", (line: string) => {
         case "transfer": {
             atm.requireAuth((user) => {
                 const targetName = args[0];
-                const amount = parseFloat(args[1]);
-                if (!targetName || isNaN(amount)) {
+                const amount = parseAmount(args[1]);
+                if (!targetName || amount === null) {
                     messages.push("Usage: transfer [target] [amount]");
                 } else {
                     messages.push(...atm.transfer(user, targetName, amount));
