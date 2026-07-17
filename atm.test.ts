@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, beforeAll } from "vitest";
 import { ATMEngine } from "./atm";
 import { atmStore } from "./store";
 import { UserService } from "./services/user.service";
@@ -243,6 +243,66 @@ describe("Test Case", () => {
             const output = atm.logout().join("");
 
             expect(output).toContain("Goodbye, Bob!");
+        });
+    });
+});
+
+describe("Fixing Bug", () => {
+    let atm: ATMEngine;
+    let userAlice: any;
+    let userBob: any;
+    let userCharlie: any;
+
+    beforeAll(() => {
+        atmStore.reset();
+    });
+
+    beforeEach(() => {
+        atm = new ATMEngine();
+
+        userAlice = UserService.getOrCreateUser("Alice");
+        userBob = UserService.getOrCreateUser("Bob");
+        userCharlie = UserService.getOrCreateUser("Charlie");
+    });
+
+    describe("", () => {
+
+        it("Alice transfer to Bob", () => {
+            let output = atm.login("Alice").join("");
+
+            expect(output).toContain("Hello, Alice!");
+            expect(output).toContain("Your balance is $0");
+            expect(userAlice.balance).toBe(0);
+
+            output = atm.transfer(userAlice, 'Bob', 50).join("");
+
+            expect(output).toContain("Your balance is $0");
+            expect(userAlice.balance).toBe(0);
+
+            output = atm.logout().join("");
+
+            expect(output).toContain("Goodbye, Alice!");
+        });
+
+        it("Deposit to Charlie", () => {
+            let output = atm.login("Charlie").join("");
+
+            expect(output).toContain("Hello, Charlie!");
+            expect(output).toContain("Your balance is $0");
+            expect(userCharlie.balance).toBe(0);
+
+            output = atm.deposit(userCharlie, 100).join("");
+
+            expect(output).toContain("Your balance is $100");
+            expect(userCharlie.balance).toBe(100);
+        });
+
+        it("Charlie transfer to Alice", () => {
+            let output = atm.transfer(userCharlie, 'Alice', 50).join("");
+
+            expect(output).toContain("Your balance is $50");
+            expect(userCharlie.balance).toBe(50);
+            expect(userAlice.balance).toBe(0);
         });
     });
 });

@@ -84,10 +84,31 @@ export class TransactionService {
         if (remainingToTransfer > 0 && user.balance > 0) {
             const cashTransfer = Math.min(remainingToTransfer, user.balance);
             UserService.updateBalance(user, 'reduce', cashTransfer);
-            UserService.updateBalance(targetUser, 'add', cashTransfer);
             remainingToTransfer -= cashTransfer;
 
             output.push(`Transferred $${cashTransfer} to ${targetUser.name}\n`);
+
+            // Check target user has debt
+            const targetUsereDebts: Debt[] = atmStore.getDebt(targetUser.user_key) as Debt[];
+            let paidRemain = cashTransfer;
+            console.log(paidRemain);
+            if (targetUsereDebts && targetUsereDebts.length) {
+                for (const debt of targetUsereDebts) {
+                    if (paidRemain === 0) {
+                        break;
+                    }
+
+                    const debtTargetUser: User = atmStore.getUser(debt.target_user_key)!;
+                    const isDebtSettled = DebtService.reduceDebt(targetUser, debtTargetUser, paidRemain);
+
+                    if (isDebtSettled > 0) {
+                        UserService.updateBalance(debtTargetUser, 'add', isDebtSettled);
+                        paidRemain -= isDebtSettled;
+                    }
+                }
+            }
+            console.log(paidRemain);
+            UserService.updateBalance(targetUser, 'add', paidRemain);
         }
 
         // 3. Remaining amount will counted as debt
