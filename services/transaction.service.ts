@@ -91,8 +91,9 @@ export class TransactionService {
             // Check target user has debt
             const targetUsereDebts: Debt[] = atmStore.getDebt(targetUser.user_key) as Debt[];
             let paidRemain = cashTransfer;
-            console.log(paidRemain);
+
             if (targetUsereDebts && targetUsereDebts.length) {
+                // using same function from deposit() to paid debt first
                 for (const debt of targetUsereDebts) {
                     if (paidRemain === 0) {
                         break;
